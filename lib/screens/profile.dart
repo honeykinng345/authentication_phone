@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geekfleet/screens/dashboard/dashboard.dart';
 import 'package:geekfleet/screens/updateProfile.dart';
 import 'package:geekfleet/utils/firebaseCredentials.dart';
 import 'package:geekfleet/widgets/arrowBackWidget.dart';
@@ -33,7 +34,7 @@ class _ProfileState extends State<Profile> {
 
   getUserDevices() async {
     return FirebaseCredentials()
-        .firestore
+        .firebaseFirestore
         .collection('devices')
         .where('deviceUserId',
             isEqualTo: FirebaseCredentials().auth.currentUser.uid)
@@ -42,7 +43,7 @@ class _ProfileState extends State<Profile> {
 
   getUserData() async {
     return FirebaseCredentials()
-        .firestore
+        .firebaseFirestore
         .collection('user')
         .doc(FirebaseCredentials().auth.currentUser.uid)
         .get();
@@ -67,7 +68,13 @@ class _ProfileState extends State<Profile> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          ArrowBackWidget(),
+                          ArrowBackWidget(
+                            function: () => Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Dashboard()),
+                                (route) => false),
+                          ),
                           Text(
                             'Profile',
                             style: TextStyle(
@@ -188,74 +195,64 @@ class _ProfileState extends State<Profile> {
                                 color: Colors.white,
                               )),
                           title: Text(
-                            "PAYG plan ",
+                            document.data()['subscriptionType'] == ""
+                                ? 'No Plan'
+                                : document.data()['subscriptionType'],
                             style:
                                 TextStyle(color: Colors.grey[12], fontSize: 16),
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 20),
-                          child: Container(
-                              width: double.infinity,
-                              height: 150,
-                              child: Card(
-                                color: Color(0xff707070),
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.only(top: 20, left: 30),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'PAYG',
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 20),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        'Free',
-                                        style: TextStyle(
-                                          color: Colors.grey,
+                        document.data()['subscriptionType'] == ""
+                            ? Container()
+                            : Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 20),
+                                child: Container(
+                                    width: double.infinity,
+                                    height: 150,
+                                    child: Card(
+                                      color: Color(0xff707070),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 20, left: 30),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              document
+                                                  .data()['subscriptionType'],
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 20),
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              'Fee',
+                                              style: TextStyle(
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              '\$15',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 20),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      SizedBox(
-                                        height: 5,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
                                       ),
-                                      Text(
-                                        '\$15',
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 20),
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            'More',
-                                            style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 10),
-                                          ),
-                                          IconButton(
-                                              icon: Icon(
-                                                Icons.arrow_drop_down,
-                                                color: Colors.white,
-                                              ),
-                                              onPressed: () {})
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                              )),
-                        ),
+                                    )),
+                              ),
                       ],
                     )
                   ],

@@ -198,7 +198,7 @@ class _AddTicketState extends State<AddTicket> {
         _status = true;
       });
       String currentUserId = FirebaseCredentials().auth.currentUser.uid;
-      FirebaseCredentials().firestore.collection('tickets').doc().set({
+      FirebaseCredentials().firebaseFirestore.collection('tickets').doc().set({
         'summary': summaryController.text,
         'description': descriptionController.text,
         'selectedDevice': selectedDevice,

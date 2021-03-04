@@ -8,6 +8,7 @@ import 'package:geekfleet/widgets/progressWidget.dart';
 
 class SignIn extends StatefulWidget {
   static const String logInScreenRoute = 'LoginScreen';
+
   @override
   _SignInState createState() => _SignInState();
 }
@@ -189,7 +190,15 @@ class _SignInState extends State<SignIn> {
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18),
                                   ),
-                                  onPressed: () => login())),
+                                  onPressed: () async {
+                                    try {
+                                      await login();
+                                    } catch (e) {
+                                      setState(() {
+                                        status = false;
+                                      });
+                                    }
+                                  })),
                       SizedBox(
                         height: 20,
                       ),
@@ -291,18 +300,32 @@ class _SignInState extends State<SignIn> {
     );
   }
 
-  void login() async {
+  login() async {
     if (_formKey.currentState.validate()) {
-      setState(() {
-        status = true;
-      });
+      setState(
+        () => status = true,
+      );
+
       await FirebaseCredentials()
           .auth
           .signInWithEmailAndPassword(
               email: emailController.text, password: passController.text)
-          .then((value) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Dashboard()));
+          .then((value) async {
+        await FirebaseCredentials()
+            .firebaseFirestore
+            .collection('user')
+            .where('email', isEqualTo: emailController.text)
+            .where('userType', isEqualTo: 'customer')
+            .get()
+            .then((value) async {
+          if (value.docs.length == 1)
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => Dashboard()));
+          else {
+            await FirebaseCredentials().auth.signOut();
+            setState(() => status = false);
+          }
+        });
       });
     }
   }

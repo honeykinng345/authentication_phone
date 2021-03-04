@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +42,7 @@ class _EditProfileState extends State<EditProfile> {
 
   getUserData() {
     return FirebaseCredentials()
-        .firestore
+        .firebaseFirestore
         .collection('user')
         .doc(FirebaseCredentials().auth.currentUser.uid)
         .get();
@@ -390,7 +389,7 @@ class _EditProfileState extends State<EditProfile> {
       downUrl = await addImg.ref.getDownloadURL();
     }
     FirebaseCredentials()
-        .firestore
+        .firebaseFirestore
         .collection("user")
         .doc(FirebaseCredentials().auth.currentUser.uid)
         .update({

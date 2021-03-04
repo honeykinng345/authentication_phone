@@ -1,11 +1,15 @@
 import 'dart:ui';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:geekfleet/screens/dashboard/home.dart';
+import 'package:geekfleet/modals/routeArgumentModal.dart';
+import 'package:geekfleet/screens/addTicket.dart';
 import 'package:geekfleet/screens/dashboard/events.dart';
+import 'package:geekfleet/screens/dashboard/home.dart';
 import 'package:geekfleet/screens/dashboard/liveChat.dart';
 import 'package:geekfleet/screens/dashboard/myTickets.dart';
-import 'package:geekfleet/screens/addTicket.dart';
 import 'package:geekfleet/utils/constants.dart';
+import 'package:geekfleet/utils/firebaseCredentials.dart';
 
 class Dashboard extends StatefulWidget {
   static const String HomeScreenRoute = 'HomeScreen';
@@ -17,10 +21,26 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   int i = 0;
 
+  String currentUserId = FirebaseCredentials().auth.currentUser.uid;
+
   List<Widget> _items;
+  DocumentSnapshot document;
 
   void initState() {
     super.initState();
+    getUserData().then((data) {
+      setState(() {
+        document = data;
+      });
+    });
+  }
+
+  getUserData() {
+    return FirebaseCredentials()
+        .firebaseFirestore
+        .collection('user')
+        .doc(FirebaseCredentials().auth.currentUser.uid)
+        .get();
   }
 
   void _updateTab(int index) {
@@ -31,11 +51,20 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
+    // UserDataModal user = bloc.fetchUserData();
+    // // UserDataModal user = Provider.of<UserDataModal>(context,listen: false);
     _items = [
       Home(),
       MyTickets(),
       Events(),
-      LiveChat(),
+      document != null
+          ? LiveChat(
+             /* routeArgumentModal: RouteArgumentModal(
+                  param1: currentUserId,
+                  param2: document.data()['userImage'],
+                  param3: document.data()['firstName']),*/
+            )
+          : Container()
     ];
 
     return Scaffold(
@@ -46,7 +75,7 @@ class _DashboardState extends State<Dashboard> {
         child: Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: _items[i],
+      body: document != null ? _items[i] : Container(),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: i,

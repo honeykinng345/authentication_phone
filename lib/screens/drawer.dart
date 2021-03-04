@@ -24,11 +24,18 @@ class _LeftDrawerState extends State<LeftDrawer> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: Image.asset(
-                        'images/backWhiteIcon.png',
-                        height: 20,
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 15),
+                      child: GestureDetector(
+                        onTap: () => Navigator.pop(context),
+                        child: Image.asset(
+                          'images/backWhiteIcon.png',
+                          height: 20,
+                        ),
                       ),
                     )
                   ],

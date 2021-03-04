@@ -47,7 +47,7 @@ class _HomeState extends State<Home> {
 
   getLaptops() async {
     return await FirebaseCredentials()
-        .firestore
+        .firebaseFirestore
         .collection('devices')
         .where('deviceUserId', isEqualTo: currentUserId)
         .where('deviceCategory', isEqualTo: 'PC/Laptop')
@@ -56,7 +56,7 @@ class _HomeState extends State<Home> {
 
   getMobiles() async {
     return await FirebaseCredentials()
-        .firestore
+        .firebaseFirestore
         .collection('devices')
         .where('deviceUserId', isEqualTo: currentUserId)
         .where('deviceCategory', isEqualTo: 'Mobile Devices')
@@ -65,7 +65,7 @@ class _HomeState extends State<Home> {
 
   getNetworking() async {
     return await FirebaseCredentials()
-        .firestore
+        .firebaseFirestore
         .collection('devices')
         .where('deviceUserId', isEqualTo: currentUserId)
         .where('deviceCategory', isEqualTo: 'Networking')
@@ -74,7 +74,7 @@ class _HomeState extends State<Home> {
 
   getHomeDevices() async {
     return await FirebaseCredentials()
-        .firestore
+        .firebaseFirestore
         .collection('devices')
         .where('deviceUserId', isEqualTo: currentUserId)
         .where('deviceCategory', isEqualTo: 'Home Devices')

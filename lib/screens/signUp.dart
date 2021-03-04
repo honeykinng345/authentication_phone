@@ -610,7 +610,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             .currentUser
             .updateEmail(emailController.text);
         FirebaseCredentials()
-            .firestore
+            .firebaseFirestore
             .collection('user')
             .doc(value.user.uid)
             .set({
@@ -620,7 +620,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
           'contact': phoneController.text,
           'address': addressController.text,
           'userImage': _image != null ? downUrl : '',
-          'contactMethod': contactMethod
+          'contactMethod': contactMethod,
+          'userType': "customer",
+          'subscriptionType': ""
         });
       });
       setState(() {

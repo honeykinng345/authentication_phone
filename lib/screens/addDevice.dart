@@ -280,7 +280,7 @@ class _AddDeviceState extends State<AddDevice> {
       });
       String currentUserId = FirebaseCredentials().auth.currentUser.uid;
 
-      FirebaseCredentials().firestore.collection('devices').doc().set({
+      FirebaseCredentials().firebaseFirestore.collection('devices').doc().set({
         'deviceName': deviceName.text,
         'serialNumber': serialNumber.text,
         'notes': notes.text,

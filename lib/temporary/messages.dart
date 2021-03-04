@@ -6,27 +6,19 @@ class Messages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: Firestore.instance.collection('chat')
-      .snapshots(),
-      builder: (ctx, chatSnapshot){
-        if(chatSnapshot.connectionState== ConnectionState.waiting){
-           return Center(
-             child: CircularProgressIndicator(),
-           );
-
-
+      stream: Firestore.instance.collection('chat').snapshots(),
+      builder: (ctx, chatSnapshot) {
+        if (chatSnapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
         }
-        final chatDocs=chatSnapshot.data.documents;
+        final chatDocs = chatSnapshot.data.documents;
         return ListView.builder(
           itemCount: chatDocs.length,
-          itemBuilder:(ctx,index)=>Text(chatDocs[index]['text']),);
-
-
-
+          itemBuilder: (ctx, index) => Text(chatDocs[index]['text']),
+        );
       },
-
-
-      
     );
   }
 }
