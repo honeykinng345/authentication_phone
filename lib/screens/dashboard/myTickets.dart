@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geekfleet/bloc/fetchDataFromFirebase.dart';
 import 'package:geekfleet/modals/myTicketListModal.dart';
@@ -173,35 +174,87 @@ class _MyTicketsState extends State<MyTickets> {
                   itemCount: list.queryList.length,
                   physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (context, i) {
-                    return Container(
-                        width: double.infinity,
-                        child: Card(
-                          child: Padding(
+                    return Card(
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 25,
+                            color: list.queryList[i].ticketStatus == 'Open'
+                                ? Colors.blue
+                                : list.queryList[i].ticketStatus == 'Assigned'
+                                    ? purple
+                                    : primary,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 2),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                //Text(list.queryList[i].description,style: TextStyle(color: Colors.white),),
+                                Text('Waiting',
+                                    style: TextStyle(color: Colors.white)),
+                                Text(
+                                    list.queryList[i].ticketStatus == 'Open'
+                                        ? 'Assigning'
+                                        : list.queryList[i].ticketStatus ==
+                                                'Assigned'
+                                            ? 'Assigned'
+                                            : 'Closed',
+                                    style: TextStyle(color: Colors.white)),
+                              ],
+                            ),
+                          ),
+                          Padding(
                               padding: EdgeInsets.symmetric(
-                                  horizontal: 5, vertical: 10),
+                                  horizontal: 5, vertical: 5),
                               child: ListTile(
-                                title: Text(
-                                  list.queryList[i].summary,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
+                                leading: Container(
+                                  width: 40,
+                                  child: Image.asset(
+                                    list.queryList[i].deviceCategory ==
+                                            "PC/Laptops"
+                                        ? 'images/laptopes.png'
+                                        : list.queryList[i].deviceCategory ==
+                                                'Mobile Devices'
+                                            ? 'images/mobiles.png'
+                                            : list.queryList[i]
+                                                        .deviceCategory ==
+                                                    'Networking'
+                                                ? 'images/modem.png'
+                                                : 'images/house.png',
+                                  ),
                                 ),
-                                subtitle: Padding(
-                                  padding: const EdgeInsets.only(top: 10),
+                                title: Container(
+                                  height: 20,
                                   child: Text(
-                                    list.queryList[i].description,
+                                    list.queryList[i].summary,
                                     style: TextStyle(
-                                        color: purple,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500),
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                subtitle: Container(
+                                  height: 20,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 5),
+                                    child: Text(
+                                      list.queryList[i].description,
+                                      style: TextStyle(
+                                          color: purple,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   ),
                                 ),
                               )),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ));
+                        ],
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(10.0),
+                            bottomRight: Radius.circular(10.0)),
+                      ),
+                    );
                   },
                 ),
                 SizedBox(

@@ -2,15 +2,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 class MyTicketListModal {
-  String device, summary, description;
+  String device, summary, description, deviceCategory, ticketStatus;
 
-  MyTicketListModal({this.description, this.device, this.summary});
+  MyTicketListModal(
+      {this.description,
+      this.device,
+      this.summary,
+      this.deviceCategory,
+      this.ticketStatus});
 
   factory MyTicketListModal.fromAPI(Map<String, dynamic> jsonObject) {
     return MyTicketListModal(
+        deviceCategory: jsonObject['deviceCategory'],
         description: jsonObject['description'],
         summary: jsonObject['summary'],
-        device: jsonObject['selectedDevice']);
+        device: jsonObject['selectedDevice'],
+        ticketStatus: jsonObject['ticketStatus']);
   }
 }
 

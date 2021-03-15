@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geekfleet/screens/signIn.dart';
 import 'package:geekfleet/screens/profile.dart';
 import 'package:geekfleet/utils/firebaseCredentials.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LeftDrawer extends StatefulWidget {
   @override
@@ -68,8 +69,12 @@ class _LeftDrawerState extends State<LeftDrawer> {
                     "Logout",
                     style: TextStyle(color: Colors.white, fontSize: 20),
                   ),
-                  onTap: () {
+                  onTap: () async {
                     FirebaseCredentials().auth.signOut();
+                    GoogleSignIn googleSignIn = GoogleSignIn();
+                    if(await googleSignIn.isSignedIn()){
+                      googleSignIn.signOut();
+                    }
                     Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (context) => SignIn()),

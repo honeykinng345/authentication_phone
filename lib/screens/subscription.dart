@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geekfleet/utils/firebaseCredentials.dart';
 import 'package:geekfleet/widgets/arrowBackWidget.dart';
+import 'dart:io' show Platform;
+
+import 'package:stripe_payment/stripe_payment.dart';
 
 class Subscription extends StatefulWidget {
   static const String subscription1ScreenRoute = 'SubscriptionScreen1';
@@ -23,9 +26,12 @@ class _SubscriptionState extends State<Subscription> {
     super.initState();
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: Container(
         decoration: BoxDecoration(
             image: DecorationImage(
@@ -142,6 +148,31 @@ class _SubscriptionState extends State<Subscription> {
               ),
               GestureDetector(
                 onTap: () async {
+                  if (Platform.isAndroid) {
+                  } else if (Platform.isIOS) {
+                    StripePayment.paymentRequestWithNativePay(
+                      androidPayOptions: AndroidPayPaymentRequest(
+                        totalPrice: "2.40",
+                        currencyCode: "EUR",
+                      ),
+                      applePayOptions: ApplePayPaymentOptions(
+                        countryCode: 'DE',
+                        currencyCode: 'EUR',
+                        items: [
+                          ApplePayItem(
+                            label: 'Test',
+                            amount: '27',
+                          )
+                        ],
+                      ),
+                    ).then((token) {
+                      setState(() {
+                        _scaffoldKey.currentState.showSnackBar(SnackBar(
+                            content: Text('Received ${token.tokenId}')));
+                        //_paymentToken = token;
+                      });
+                    }).catchError((error) {});
+                  }
                   await FirebaseCredentials()
                       .firebaseFirestore
                       .collection('user')

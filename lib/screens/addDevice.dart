@@ -279,13 +279,22 @@ class _AddDeviceState extends State<AddDevice> {
         _status = true;
       });
       String currentUserId = FirebaseCredentials().auth.currentUser.uid;
-
-      FirebaseCredentials().firebaseFirestore.collection('devices').doc().set({
+      String documentId = FirebaseCredentials()
+          .firebaseFirestore
+          .collection('devices')
+          .doc()
+          .id;
+      FirebaseCredentials()
+          .firebaseFirestore
+          .collection('devices')
+          .doc(documentId)
+          .set({
         'deviceName': deviceName.text,
         'serialNumber': serialNumber.text,
         'notes': notes.text,
         'deviceUserId': currentUserId,
-        'deviceCategory': type
+        'deviceCategory': type,
+        'documentId': documentId
       });
       setState(() {
         _status = false;

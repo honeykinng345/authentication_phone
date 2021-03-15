@@ -240,7 +240,7 @@ class _HomeState extends State<Home> {
                   children: [
                     DeviceWidget(
                       image: 'images/modem.png',
-                      tittle: 'Networking',
+                        tittle: 'Networking',
                       subTittle: 'Equipments',
                       totalDevices: networking != null
                           ? '${networking.docs.length} Devices'

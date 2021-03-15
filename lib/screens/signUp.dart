@@ -7,6 +7,8 @@ import 'package:geekfleet/screens/signIn.dart';
 import 'package:geekfleet/utils/firebaseCredentials.dart';
 import 'package:geekfleet/widgets/progressWidget.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:geekfleet/utils/constants.dart';
+import 'package:geekfleet/utils/socialAuthentication.dart';
 
 class SignUpScreen extends StatefulWidget {
   static const String signUpScreenRoute = 'SignUpScreen';
@@ -16,14 +18,6 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  final emailController = TextEditingController();
-  final passController = TextEditingController();
-  final firstNameController = TextEditingController();
-  final lastNameController = TextEditingController();
-  final addressController = TextEditingController();
-  final phoneController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
-
   bool isPassVisible = false;
   bool isConfirmPassVisible = false;
   bool _status = false;
@@ -305,6 +299,82 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       validator: (input) {
                         if (input.isEmpty)
                           return 'Required Field';
+                        else
+                          return null;
+                      },
+                      controller: cityController,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.location_city,
+                          ),
+                          contentPadding:
+                              EdgeInsets.fromLTRB(30.0, 20.0, 20.0, 20.0),
+                          hintText: "City",
+                          fillColor: Colors.white,
+                          filled: true,
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.transparent),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.transparent),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.transparent),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.transparent),
+                          )),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      validator: (input) {
+                        if (input.isEmpty)
+                          return 'Required Field';
+                        else
+                          return null;
+                      },
+                      controller: addressController,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.location_city,
+                          ),
+                          contentPadding:
+                              EdgeInsets.fromLTRB(30.0, 20.0, 20.0, 20.0),
+                          hintText: "Zip Code",
+                          fillColor: Colors.white,
+                          filled: true,
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.transparent),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.transparent),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.transparent),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.transparent),
+                          )),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      validator: (input) {
+                        if (input.isEmpty)
+                          return 'Required Field';
                         else if (input.length < 8)
                           return 'Password should be 8 character long';
                         else
@@ -424,7 +494,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         style: TextStyle(color: Colors.greenAccent),
                         dropdownColor: Colors.white,
                         decoration: InputDecoration(
-                            hintText: 'Select Method of Payment',
+                            hintText: 'Preferred Method of Payment',
                             filled: true,
                             fillColor: Colors.white,
                             focusedBorder: OutlineInputBorder(
@@ -506,18 +576,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          child: Image.asset(
-                            'images/google.png',
-                            scale: 3,
-                          ),
-                          height: 60,
-                          width: 60,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4.0),
-                            color: const Color(0x00000000),
-                            border:
-                                Border.all(width: 0.75, color: Colors.white),
+                        GestureDetector(
+                          onTap: () => signUpGoogle(context),
+                          child: Container(
+                            child: Image.asset(
+                              'images/google.png',
+                              scale: 3,
+                            ),
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4.0),
+                              color: const Color(0x00000000),
+                              border:
+                                  Border.all(width: 0.75, color: Colors.white),
+                            ),
                           ),
                         ),
                         SizedBox(
@@ -586,6 +659,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void signUp() async {
+    print(addressController.text);
     if (_formKey.currentState.validate()) {
       setState(() {
         _status = true;

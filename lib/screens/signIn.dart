@@ -4,6 +4,7 @@ import 'package:geekfleet/screens/dashboard/dashboard.dart';
 import 'package:geekfleet/screens/resetPassword.dart';
 import 'package:geekfleet/screens/signUp.dart';
 import 'package:geekfleet/utils/firebaseCredentials.dart';
+import 'package:geekfleet/utils/socialAuthentication.dart';
 import 'package:geekfleet/widgets/progressWidget.dart';
 
 class SignIn extends StatefulWidget {
@@ -219,18 +220,21 @@ class _SignInState extends State<SignIn> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
-                            child: Image.asset(
-                              'images/google.png',
-                              scale: 3,
-                            ),
-                            height: 60,
-                            width: 60,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4.0),
-                              color: const Color(0x00000000),
-                              border:
-                                  Border.all(width: 0.75, color: Colors.white),
+                          GestureDetector(
+                            onTap: () => signUpGoogle(context),
+                            child: Container(
+                              child: Image.asset(
+                                'images/google.png',
+                                scale: 3,
+                              ),
+                              height: 60,
+                              width: 60,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(4.0),
+                                color: const Color(0x00000000),
+                                border: Border.all(
+                                    width: 0.75, color: Colors.white),
+                              ),
                             ),
                           ),
                           SizedBox(
